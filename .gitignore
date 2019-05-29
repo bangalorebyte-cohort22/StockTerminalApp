@@ -102,3 +102,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+#Ignore my test folder
+
+prince/NotGit
