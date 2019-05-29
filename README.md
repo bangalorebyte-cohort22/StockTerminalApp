@@ -1,0 +1,2 @@
+# StockTerminalApp
+Weekend Assignment
