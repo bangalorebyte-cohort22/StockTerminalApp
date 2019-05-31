@@ -1,6 +1,6 @@
 import sqlite3
-from .helper import login, register
-from .menus import login_page, homepage
+from helper import register,login, user_app
+from menus import homepage
 
 def run_app(run, user):
     while run == True:
@@ -10,6 +10,7 @@ def run_app(run, user):
                 if ask == str(1):
                     user = login()
                 elif ask == str(2):
+                    print("regitration")
                     register()
                 elif ask == "q":
                     print("Now exiting the program...")
@@ -22,4 +23,14 @@ def run_app(run, user):
                 print("Please enter either 1 or 2.") 
                 input("Press enter to go back to the main menu.")
         else:
-            ask = login_page(user['username'],user['admin'])
+            if user['admin'] == 1:
+                pass
+            elif user['admin'] == 0:
+                user = user_app(user)
+
+            
+
+if __name__ == '__main__':
+    run = True
+    user = None
+    run_app(run, user)

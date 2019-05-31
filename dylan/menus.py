@@ -13,34 +13,32 @@ def homepage():
 
 >>>  '''
 
-def login_page(username, admin):
-    if admin == 1:
+def admin_page(username):
         return f'''
 #########################################################
 
 
     What would you like to do today {username}?
-        1 --- Check Account Details
-        2 --- Update Password
-        3 --- 
-        4 --- 
-        Please type any key and press enter to log out
+        1 --- See Leaderboard
+        Please type q and enter to logout
 
 
 #########################################################
 
 >>>  '''
-    else:    
+
+def user_page(username):  
         return f'''
 #########################################################
 
 
     What would you like to do today {username}?
-        1 --- Check Account Details
-        2 --- Update Password
-        3 --- 
-        4 --- 
-        Please type any key and press enter to log out
+        1 --- Search Tickers
+        2 --- Stock Market Data
+        3 --- View Portfolio
+        4 --- Buy Stocks
+        5 --- Sell Stocks
+        Please type q and enter to logout
 
 
 #########################################################
