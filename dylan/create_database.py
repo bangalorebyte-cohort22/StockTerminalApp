@@ -24,7 +24,8 @@ con.execute(
     order_made_by NOT NULL,
     order_timestamp DATETIME NOT NULL,
     stock_ticker NOT NULL,
-    strike_price NOT NULL
+    strike_price NOT NULL,
+    number_of_shares INTEGER NOT NULL
     );
     '''
 )
@@ -39,7 +40,31 @@ try:
     con.execute(
         '''
         INSERT INTO users (username,password,admin)
-        VALUES ("dillkillbill","1234",0)
+        VALUES ("user1","1234",0)
+        '''
+    )
+    con.execute(
+        '''
+        INSERT INTO users (username,password,admin)
+        VALUES ("user2","1234",0)
+        '''
+    )
+    con.execute(
+        '''
+        INSERT INTO users (username,password,admin)
+        VALUES ("user3","1234",0)
+        '''
+    )
+    con.execute(
+        '''
+        INSERT INTO users (username,password,admin)
+        VALUES ("user4","1234",0)
+        '''
+    )
+    con.execute(
+        '''
+        INSERT INTO users (username,password,admin)
+        VALUES ("user5","1234",0)
         '''
     )
 except:

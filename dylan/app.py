@@ -1,5 +1,5 @@
 import sqlite3
-from helper import register,login, user_app
+from helper import register,login, user_app, admin_app
 from menus import homepage
 
 def run_app(run, user):
@@ -24,7 +24,7 @@ def run_app(run, user):
                 input("Press enter to go back to the main menu.")
         else:
             if user['admin'] == 1:
-                pass
+                user = admin_app(user)
             elif user['admin'] == 0:
                 user = user_app(user)
 
