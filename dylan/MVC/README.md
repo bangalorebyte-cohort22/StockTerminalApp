@@ -40,10 +40,10 @@ python controller.py
 
 ## Views
 **Login View:**
-![Alt](dylan/MVC/images/1.PNG)
+![Alt](images/1.PNG)
 
 **Admin View:**
-![Alt](dylan/MVC/images/2.PNG)
+![Alt](images/2.PNG)
 
 **User View:**
-![Alt](dylan/MVC/images/3.PNG)
+![Alt](images/3.PNG)
