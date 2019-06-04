@@ -15,7 +15,6 @@ Here's a list of files in the repository:
 - `wrapper.py`: Contains the functions used to make API calls
 
 ## Usage
----
 In order to start using the terminal application, please follow these steps (you must have Python installed):
 1) Clone the repository
 ```
@@ -37,15 +36,14 @@ python controller.py
   - **Username:** user1/user2/user3/user4/user5
   - **Password:** 1234
 
-**Note: The leaderboard often spits out errors because it makes too many requests to the API.**
+> **Note: The leaderboard often spits out errors because it makes too many requests to the API.**
 
 ## Views
----
 **Login View:**
-![Alt](/images/1.png)
+![Alt](dylan/MVC/images/1.PNG)
 
 **Admin View:**
-![Alt](/images/2.png)
+![Alt](dylan/MVC/images/2.PNG)
 
 **User View:**
-![Alt](/images/3.png)
+![Alt](dylan/MVC/images/3.PNG)
