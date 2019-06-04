@@ -26,12 +26,13 @@ python create_database.py
 ```
 3) Run the app
 ```
-python controller.py
+> python controller.py
 ```
 4) Login Details
-> **Admin Account** :- username: admin, password: admin2
-> **User Accounts** :- username: user1/user2/user3/user4/user5, password: 1234
-
+```
+**Admin Account** :- username: admin, password: admin2
+**User Accounts** :- username: user1/user2/user3/user4/user5, password: 1234
+```
 **Note: The leaderboard often spits out errors because it makes too many requests to the API.**
 
 ### Views
