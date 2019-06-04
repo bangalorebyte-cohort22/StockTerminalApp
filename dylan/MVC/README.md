@@ -17,17 +17,11 @@ Here's a list of files in the repository:
 ### Usage
 In order to start using the terminal application, please follow these steps (you must have Python installed):
 1) Clone the repository
-```
-git clone
-``` 
+> git clone 
 2) Create a database
-```
-python create_database.py
-```
+> python create_database.py
 3) Run the app
-```
 > python controller.py
-```
 4) Login Details
 ```
 **Admin Account** :- username: admin, password: admin2
