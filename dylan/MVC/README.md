@@ -17,16 +17,22 @@ Here's a list of files in the repository:
 ### Usage
 In order to start using the terminal application, please follow these steps (you must have Python installed):
 1) Clone the repository
-> git clone 
-2) Create a database
-> python create_database.py
-3) Run the app
-> python controller.py
-4) Login Details
 ```
+git clone 
+```
+2) Create a database
+```
+python create_database.py
+```
+3) Run the app
+```
+python controller.py
+```
+4) Login Details
+
 **Admin Account** :- username: admin, password: admin2
 **User Accounts** :- username: user1/user2/user3/user4/user5, password: 1234
-```
+
 **Note: The leaderboard often spits out errors because it makes too many requests to the API.**
 
 ### Views
