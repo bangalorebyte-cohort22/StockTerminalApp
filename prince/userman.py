@@ -82,5 +82,25 @@ def search_company():
       print("This company does not exist on NASDAQ. Try again")
       search_company()
 
-def get_price():
+def get_price(company_ticker):
+   try:
+      response = requests.get(f'http://dev.markitondemand.com/Api/v2/Quote/json?symbol={company_ticker}')
+      price = json.loads(a.content)['LastPrice']
+      return price
+   except:
+      print("Invalid company ticker. Try again!")
+
+def buy_stock():
+   pass
+
+def sell_stock():
+   pass
+
+def view_portfolio():
+   pass
+
+def view_worth():
+   pass
+
+def view_leaderboard():
    pass

@@ -109,3 +109,4 @@ prince/NotGit
 
 dylan/old
 dylan/MVC/*.db
+prince/.vscode/settings.json
