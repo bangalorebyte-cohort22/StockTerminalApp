@@ -40,7 +40,7 @@ http://dev.markitondemand.com/MODApis/Api/v2/Quote/json?symbol=MSFT
     * retrieve market data for a stock before they purchase it
     * log in with a username and password
     * buy and sell stock
-        * buying should subtract from their funds, they cannot spend more money then what they have
+        * buying should subtract from their funds, they cannot spend more money than what they have
         * selling will add to their funds, they cannot sell more stocks then what they have
         * users should be buying and selling at the current rate of the stock
     * view their "portfolio"
