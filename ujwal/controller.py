@@ -46,7 +46,7 @@ def login():
         is_back = viewer.ask_back()
         if is_back:
             break
-    is_super = None if is_back==False else logged_super[1]
+    is_super = None if is_back == False else logged_super[1]
     viewer.done_login(is_super)
     return tuple([is_super,username])
 
@@ -82,20 +82,20 @@ def view_stock_list(username):
 def do_buy_stock(username,is_super):
     while 1:
         viewer.show_money(model.user_money(username,is_super))
-        stock_data=markit.get_stock_info(viewer.ask_stock(is_buy=True))
-        if stock_data==False:
+        stock_data = markit.get_stock_info(viewer.ask_stock(is_buy = True))
+        if stock_data == False:
             viewer.error_no_results()
             if viewer.ask_back():
                 break            
         else:
-            stock_name=stock_data[0]["Name"]
-            stock_symbol=stock_data[0]["Symbol"]
-            stock_price=stock_data[0]["LastPrice"]
+            stock_name = stock_data[0]["Name"]
+            stock_symbol = stock_data[0]["Symbol"]
+            stock_price = stock_data[0]["LastPrice"]
             viewer.show_price_qty(stock_name,stock_price)
-            qty=viewer.ask_qty(is_buy=True)
+            qty = viewer.ask_qty(is_buy=True)
             if qty == False:
                 break
-            stock_price=markit.get_stock_info(stock_symbol)[0]["LastPrice"]
+            stock_price = markit.get_stock_info(stock_symbol)[0]["LastPrice"]
             if model.buy_stock(username,is_super,stock_symbol,stock_price,qty):
                 viewer.done_stock(stock_name,stock_price,qty,is_buy=True)
                 break
@@ -105,24 +105,24 @@ def do_buy_stock(username,is_super):
                 
 def do_sell_stock(username,is_super):
     while 1:
-        stock_symbol=viewer.ask_stock(is_buy=False)
-        own_qty=model.get_user_stock(username,stock_symbol.upper())
+        stock_symbol = viewer.ask_stock(is_buy = False)
+        own_qty = model.get_user_stock(username,stock_symbol.upper())
         if own_qty == False:
             viewer.error_not_own_stock()
             if viewer.ask_back():
                 break
         else:
-            stock_data=markit.get_stock_info(stock_symbol)
-            stock_name=stock_data[0]["Name"]
-            stock_symbol=stock_data[0]["Symbol"]
-            stock_price=stock_data[0]["LastPrice"]            
+            stock_data = markit.get_stock_info(stock_symbol)
+            stock_name = stock_data[0]["Name"]
+            stock_symbol = stock_data[0]["Symbol"]
+            stock_price = stock_data[0]["LastPrice"]            
             viewer.show_price_qty(stock_name,stock_price,own_qty)        
-            sell_qty=viewer.ask_qty(is_buy=False)
+            sell_qty=viewer.ask_qty(is_buy = False)
             if sell_qty == False:
                 break
-            stock_price=markit.get_stock_info(stock_symbol)[0]["LastPrice"]
+            stock_price = markit.get_stock_info(stock_symbol)[0]["LastPrice"]
             if model.sell_stock(username,is_super,stock_symbol,stock_price,sell_qty):
-                viewer.done_stock(stock_name,stock_price,sell_qty,is_buy=False)
+                viewer.done_stock(stock_name,stock_price,sell_qty,is_buy = False)
                 break
             viewer.error_no_quantity(own_qty,sell_qty)
             if viewer.ask_back():
