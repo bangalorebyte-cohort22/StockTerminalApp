@@ -106,3 +106,7 @@ venv.bak/
 #Ignore my test folder
 
 prince/NotGit
+
+dylan/old
+dylan/MVC/*.db
+prince/.vscode/settings.json
