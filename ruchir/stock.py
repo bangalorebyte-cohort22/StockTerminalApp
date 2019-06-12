@@ -184,11 +184,13 @@ def get_quote():
 
 
 def leaderboard():
+    
     pass
 
 
 def buy_stock():
     buy_quote = input("Enter exact stock symbol you want to buy: ")
+    buy_quote_upper = buy_quote.upper()
     num_shares = input("Number of shares you want to buy of " +
                        buy_quote.upper() + "? ")
     buy_stock.buy_quote = buy_quote
@@ -219,6 +221,15 @@ def buy_stock():
     print('''
           Your order was successfully executed. Your bank balance is: ''' +
           str(new_balance))
+    # insertData_ = '''INSERT INTO stock(username, password)
+    #     VALUES(?,?)'''
+    # cursor.execute(insertData, [username, password])
+    with sqlite3.connect('data.db') as db:
+        cursor = db.cursor()
+        cursor.execute('UPDATE stocks SET numShares = numShares + '+num_shares+' WHERE username = "'+login.current_user[0]+'" AND stockSymbol = "'+buy_quote_upper+'";')
+        cursor.execute('INSERT INTO stocks(username, stockSymbol, numShares) SELECT "'+login.current_user[0]+'", "'+buy_quote_upper+'", "'+num_shares+'" WHERE (Select Changes() = 0);')
+
+
     # //TODO: Add import to database for buy_stock (UserID, stock_symbol, time_stamp, number_shares)
 
 
