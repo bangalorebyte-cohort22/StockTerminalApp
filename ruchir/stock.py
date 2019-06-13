@@ -8,6 +8,7 @@ from urllib.request import urlopen
 from create_db import *
 import requests
 from datetime import datetime
+import tabulatehelper as th
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 os.chdir(THIS_FOLDER)
@@ -94,6 +95,8 @@ def main_menu():
                 register()
             elif answer == 3:
                 company_search()
+            elif answer == 99:
+                leaderboard()
 
             else:
                 print("Command not recognized. ")
@@ -184,10 +187,18 @@ def get_quote():
 
 
 def leaderboard():
+    with sqlite3.connect('data.db') as db:
+        df = pd.read_sql_query('SELECT * from stocks', db)
+        df_1 = pd.read_sql_query('SELECT username , bankAccount from users', db)
+        df_1.sort_values(by=['bankAccount'], inplace=True, ascending = False)
+        df_1 = df_1.rename(columns={'username': "User:", 'bankAccount': "Money:"})
+        try:
+            df_1 = df_1.head(10)
+            print(th.md_table(df_1, formats={-1: 'c'}))
+        except AttributeError:
+            print(th.md_table(df_1, formats={-1: 'c'}))
     
-    pass
-
-
+    
 def buy_stock():
     buy_quote = input("Enter exact stock symbol you want to buy: ")
     buy_quote_upper = buy_quote.upper()
@@ -247,8 +258,6 @@ def sell_stock():
 
 
 def stock_table_update():
-    # df.to_sql("librarian", conn, if_exists="append", index=True)
-
     data = [
         login.current_user[0], buy_stock.buy_quote, buy_stock.stock_price,
         buy_stock.num_shares
@@ -267,21 +276,29 @@ def stock_table_update():
 
 def view_portfolio():
     #//TO: Use pandas to easily display portfolio
-    data = [
-        login.current_user, buy_stock.buy_quote, buy_stock.stock_price,
-        buy_stock.num_shares
-    ]
-    df = pd.DataFrame(
-        [data], columns=["username", "stockSymbol", "price", "numShares"])
+    with sqlite3.connect('data.db') as db:
+        # cursor = db.cursor() 
+        df = pd.read_sql_query('SELECT * from stocks WHERE username="'+login.current_user[0]+'";', db)
+        df = df.reindex(["stockSymbol","numShares"] ,axis=1)
+        df = df.rename(columns={'stockSymbol': "Stocks Owned:", 'numShares': "# of Shares:"})
+        print("\nYour Current Portfolio:\n\n"+th.md_table(df, formats={-1: 'c'}))
 
-    print(data)
+    # data = [
+    #     login.current_user, buy_stock.buy_quote, buy_stock.stock_price,
+    #     buy_stock.num_shares
+    # ]
+    # df = pd.DataFrame(
+    #     [data], columns=["username", "stockSymbol", "price", "numShares"])
+
+    # print(data)
 
 
 def logout():
-    # del login.current_user
-    # login.current_user.clear()
-    pass
-
+    login.current_user.clear()
+    login.current_user = []
+    print("You have successfully logged out! ")
+    time.sleep(1)
+    return main_menu()
 
 if __name__ == "__main__":
     create_tables()
