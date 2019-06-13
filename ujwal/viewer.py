@@ -85,7 +85,11 @@ def ask_qty(is_buy):
         qty = ask_input("the quantity u wanna "+buy_or_sell+" or enter n or no for no")
         if qty.lower() in no:
             qty = False
+            return qty
         try:
+            if int(qty) <= 0:
+                error_qty_not_positive(qty)
+                continue
             return int(qty)
         except:
             error_qty(qty)
@@ -110,8 +114,11 @@ def error_login():
 def error_qty(qty):
     return show_error(qty + " is neither an integer nor n or no")
 
+def error_qty_not_positive(qty):
+    return show_error(qty + " is not a positive integer")
+
 def error_no_money(own_money,spend_money):
-    return show_error("U only own $"+str(own_money)+", but u r trying to spend $"+str(spend_money)+", u r in a shortage of $"+str(spend_money-own_money))
+    return show_error("U only have $"+str(own_money)+" in ur account, but u r trying to spend $"+str(round(spend_money, 2))+", u r in a shortage of $"+str(round(spend_money-own_money, 2)))
 
 def error_not_own_stock():
     return show_error("U do not own this stock")
