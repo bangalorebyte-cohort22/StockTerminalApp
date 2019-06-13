@@ -117,7 +117,7 @@ class Menu(object):
             try:
                 index = int(input()) - 1
                 if index == -1:
-                    create_IndexError = ""[0]
+                    raise IndexError()
                 option = self.options[index]
                 handler = option[1]
                 args = option[2]

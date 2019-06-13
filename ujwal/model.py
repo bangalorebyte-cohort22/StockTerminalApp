@@ -1,6 +1,7 @@
 import sqlite3
 from requests import get
 import urllib.parse as up
+import pandas as pd
 
 class Markit:
     def __init__(self):
@@ -76,6 +77,42 @@ def user_money(username,is_super):
     cur.execute('SELECT "money" FROM '+abs(is_super-1)*'User'+is_super*'Super_user'+' WHERE username = "'+username+'";')
     return cur.fetchone()[0]
 
+def user_total_value(username,is_super):
+    cur.execute('SELECT symbol, quantity FROM Stock WHERE username="'+username+'";')
+    symbol_quantity = dict(cur.fetchall())
+    cur.execute('SELECT symbol, last_buy_price FROM Stock_price')
+    symbol_price = dict(cur.fetchall())
+    stock_worth = 0
+    for i in symbol_quantity.keys():
+        stock_worth += symbol_price[i] * symbol_quantity[i]
+    money = user_money(username,is_super)
+    return [stock_worth+money,stock_worth,money]
+
+def user_stock_list(username):
+    cur.execute('SELECT symbol, quantity FROM Stock WHERE username="'+str(username)+'";')
+    symbol_quantity = dict(cur.fetchall())
+    symbol = list(symbol_quantity.keys())
+    quantity = list(symbol_quantity.values())
+    cur.execute('SELECT symbol, last_buy_price FROM Stock_price')
+    symbol_price = dict(cur.fetchall())
+    price = list(map(lambda asymbol: symbol_price[asymbol], symbol))
+    worth = list(map(lambda i: quantity[i] * price[i], range(len(quantity))))
+    return [symbol,quantity,price,worth]
+
+def leaderboard(top_what = 10):
+    cur.execute('SELECT username FROM User;')
+    usernames = list(cur.fetchall())
+    cur.execute('SELECT username FROM Super_user;')
+    usernames.extend(list(cur.fetchall()))
+    data = {}
+    for i in range(len(usernames)):
+        username = usernames[i][0]
+        data[i] = [username] + user_total_value(username,is_super(username))
+    columns = ["Username","Total Worth","Stock Worth","Money"]
+    df = pd.DataFrame.from_dict(data, orient='index', columns=columns)
+    df = df.sort_values(by=["Total Worth","Stock Worth"], ascending=False).head(top_what)
+    return df.values.tolist(),columns
+
 def buy_stock(username,is_super,stock_symbol,stock_price,qty):
     money = user_money(username,is_super)
     if money < stock_price * qty:
@@ -107,4 +144,4 @@ def sell_stock(username,is_super,stock_symbol,stock_price,qty):
     cur.execute('DELETE FROM Stock WHERE quantity = 0;')
     cur.execute('UPDATE Stock_price SET last_buy_price = '+str(stock_price)+' WHERE symbol = "'+stock_symbol+'";')
     save()
-    return True    
+    return True

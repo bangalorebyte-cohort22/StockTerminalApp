@@ -17,11 +17,20 @@ def show_exit():
 def show_money(money):
     return print("The amount of money u have in ur account is $"+str(money))
 
+def show_total_value(stock_worth,money,total_worth):
+    return print("Ur account total woth is $"+str(total_worth)+", with stock worth of $"+str(stock_worth)+" and the amount of money in ur account is $"+str(money)+".")
+
 def show_price_qty(stock_name,price,*qty):
-    extra=""
-    for i in qty:
+    extra = ""
+    if len(qty) > 0:
         extra = " (U own "+str(qty[0])+" shares)"
     return print("Price of "+stock_name+" stock is $"+str(price)+" each share."+extra)
+
+def show_stock_list(symbol,quantity,price,worth):
+    return print(pd.DataFrame.from_dict({"Ticker Symbol":symbol,"Quantity":quantity,"Price":price,"Worth":worth}).to_string(index = False))
+
+def show_leaderboard(rows,columns):
+    return print(pd.DataFrame(rows, columns = columns).to_string(index=False))
 
 # Basic IO functions
 def ask_input(item):

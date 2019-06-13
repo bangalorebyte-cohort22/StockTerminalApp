@@ -1,4 +1,3 @@
-import pandas as pd
 from re import findall
 import model
 import viewer
@@ -46,8 +45,9 @@ def login():
         is_back = viewer.ask_back()
         if is_back:
             break
-    is_super = None if is_back == False else logged_super[1]
-    viewer.done_login(is_super)
+    is_super = None if is_back == True else logged_super[1]
+    if is_super != None:
+        viewer.done_login(is_super)
     return tuple([is_super,username])
 
 def do_search(is_company_search):
@@ -71,13 +71,22 @@ def do_retrieve_market_data():
     do_search(False)  
 
 def leaderboard():
-    pass
+    viewer.show_leaderboard(*model.leaderboard())
 
-def view_total_value(username):
-    pass
+def view_total_value(username,is_super):
+    stockWorth_money = model.user_total_value(username,is_super)
+    stock_worth = stockWorth_money[1]
+    money = stockWorth_money[2]
+    total_worth = stockWorth_money[0]
+    viewer.show_total_value(stock_worth,money,total_worth)
 
 def view_stock_list(username):
-    pass
+    symbol_quantity_price_worth = model.user_stock_list(username)
+    symbol = symbol_quantity_price_worth[0]
+    quantity = symbol_quantity_price_worth[1]
+    price = symbol_quantity_price_worth[2]
+    worth = symbol_quantity_price_worth[3]
+    viewer.show_stock_list(symbol,quantity,price,worth)
 
 def do_buy_stock(username,is_super):
     while 1:
