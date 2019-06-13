@@ -21,9 +21,9 @@ def create_tables():  # Creating sqlite database with tables: users, stocks
                        (orderID INTEGER PRIMARY KEY AUTOINCREMENT,
                        username NOT NULL,
                        stockSymbol NOT NULL,
-                       orderType NOT NULL,
-                       orderTime DATETIME NOT NULL,
-                       price NOT NULL,
+                       orderType,
+                       orderTime,
+                       price,
                        numShares NOT NULL);'''
                   )  # OrderType is either b (buy) or s (sell)
         # OrderUserID is the User ID who placed
