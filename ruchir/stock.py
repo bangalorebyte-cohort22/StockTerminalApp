@@ -9,6 +9,7 @@ from create_db import *
 import requests
 from datetime import datetime
 import tabulatehelper as th
+import sys
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 os.chdir(THIS_FOLDER)
@@ -85,7 +86,8 @@ def main_menu():
             print('''
                  [1] -- > Login
                  [2] -- > Register
-                 [3] -- > Search by Company Name or Symbol (w/o Logging-in)''')
+                 [3] -- > Search by Company Name or Symbol (w/o Logging-in)
+                 [4] -- > Quit''')
 
             answer = int(input("[Enter]: "))
 
@@ -95,6 +97,10 @@ def main_menu():
                 register()
             elif answer == 3:
                 company_search()
+            elif answer == 4:
+                print("Quitting the program!")
+                time.sleep(2)
+                sys.exit()
             elif answer == 99:
                 leaderboard()
 
@@ -152,7 +158,8 @@ def company_search():
     if data.empty:
         print('No results found')
     else:
-        print(data)
+        print("\nCompany Search Results:\n\n"+th.md_table(data, formats={-1: 'c'}))
+
 
 
 def get_quote():
@@ -176,10 +183,11 @@ def get_quote():
                           axis=1)
 
         print("Quote for " + search_quote.upper() + " as of " +
-              datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " UTC:")
-        print(df1)
-        print("\n")
-        print(df2)
+              datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " UTC:\n\n")
+        
+        print(th.md_table(df1, formats={-1: 'c'}))
+        print("\n"+th.md_table(df2, formats={-1: 'c'}))
+
     except:
         print("Server not responding. Try again later. ")
         time.sleep(1)
@@ -247,13 +255,52 @@ def buy_stock():
 
 def sell_stock():
     sell_quote = input("Enter exact stock symbol you want to sell: ")
-    num_shares_sold = input("Number of shares you want to sell of " +
-                            sell_quote.upper() + "? ")
-    url = urlopen(
-        'http://dev.markitondemand.com/MODApis/Api/v2/Quote/json?symbol=' +
-        buy_quote)
-    obj = json.load(url)
-    stock_price = obj["LastPrice"]
+    sell_quote_upper = sell_quote.upper()
+    num_shares_sold = int(input("Number of shares you want to sell of " +
+                            sell_quote_upper + "? "))
+    try:
+        url = urlopen(
+            'http://dev.markitondemand.com/MODApis/Api/v2/Quote/json?symbol=' +
+            sell_quote)
+        obj = json.load(url)
+        stock_price = obj["LastPrice"]
+        amount_added = float(stock_price) * float(num_shares_sold)
+
+        with sqlite3.connect('data.db') as db:
+            df = pd.read_sql_query('SELECT stockSymbol, numShares FROM stocks WHERE username="'+login.current_user[0]+'";', db)
+            df_1 = df[(df.stockSymbol.str.contains(sell_quote_upper))]
+            shares_owned = int(df_1.iloc[0]['numShares'])
+            stock_list = df_1.values.tolist()
+            # df_1 = pd.read_sql_query('SELECT numshares from stocks ')
+    # try:
+
+        if num_shares_sold <= shares_owned and sell_quote_upper in stock_list[0]:
+            with sqlite3.connect('data.db') as db:
+                cursor = db.cursor()
+                find_bank_balance = ("SELECT bankAccount from users WHERE username = ?")
+                cursor.execute(find_bank_balance, [(login.current_user[0])])
+                results = list(cursor)
+                results_list = [x[0] for x in results]
+                new_balance = float(results_list[0]) + float(amount_added)
+                cursor.execute(
+                        '''UPDATE users SET bankAccount = ? WHERE username = ?''',
+                        (new_balance, login.current_user[0]))
+                cursor.execute('UPDATE stocks SET numShares = numShares - '+str(num_shares_sold)+' WHERE username = "'+login.current_user[0]+'" AND stockSymbol = "'+sell_quote_upper+'";')
+                print('''
+                    Your order was successfully executed. Your bank balance is: ''' + str(new_balance))
+        else:
+            print("You don't own the stocks you are trying to sell! ")
+    except KeyError:
+        print("Invalid operation. Please try again. ")
+    except ValueError:
+        print("Invalid operation. Please try again. ")
+    except AttributeError:
+        print("Invalid operation. Please try again. ")
+
+
+            
+            
+
     # //TODO: Immediately add to bank account the moment the user sells a stock.
     # //TODO: Add import to database for sell_stock (UserID, stock_symbol, time_stamp, number_shares)
 
