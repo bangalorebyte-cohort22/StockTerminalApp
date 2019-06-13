@@ -187,6 +187,7 @@ def get_quote():
 
 
 def leaderboard():
+    print("Leaderboard: \n\n")
     with sqlite3.connect('data.db') as db:
         df = pd.read_sql_query('SELECT * from stocks', db)
         df_1 = pd.read_sql_query('SELECT username , bankAccount from users', db)
